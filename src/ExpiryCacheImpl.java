@@ -57,8 +57,7 @@ public class ExpiryCacheImpl<K, V> implements ExpiryCache<K, V> {
 	public V get(K key) {
 		ValueSpec<V> valueSpec = store.get(key);
 		if (valueSpec == null) {
-			// In case the value is null, we have to lock the whole store to
-			// ensure that no puts happen.
+			// In case the value is null, we acquire a null-read lock to ensure no puts happen.
 			synchronized (NULL_READ_LOCK) {
 				valueSpec = store.get(key);
 				if (valueSpec == null) {
